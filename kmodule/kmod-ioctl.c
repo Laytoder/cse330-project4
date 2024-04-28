@@ -69,14 +69,20 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 bio_set_dev(bdevice_bio, bdevice);
                 bdevice_bio->bi_iter.bi_sector = curr_offset;
                 bdevice_bio->bi_opf = REQ_OP_READ;
-                bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset);
+                if(bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset)) {
+                    printk("Error: bio_add_page failed.\n");
+                    return -1;
+                }
             }
             else {
                 bdevice_bio = bio_alloc(bdevice, num_buffers, REQ_OP_WRITE, GFP_NOIO);
                 bio_set_dev(bdevice_bio, bdevice);
                 bdevice_bio->bi_iter.bi_sector = curr_offset;
                 bdevice_bio->bi_opf = REQ_OP_WRITE;
-                bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset);
+                if(bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset)) {
+                    printk("Error: bio_add_page failed.\n");
+                    return -1;
+                }
             }
 
             curr_offset = curr_offset + rw_request.size;
@@ -111,7 +117,10 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 bio_set_dev(bdevice_bio, bdevice);
                 bdevice_bio->bi_iter.bi_sector = curr_offset;
                 bdevice_bio->bi_opf = REQ_OP_READ;
-                bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset);
+                if(bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset)) {
+                    printk("Error: bio_add_page failed.\n");
+                    return -1;
+                }
             }
             else {
                 curr_offset = rwoffset_request.offset;
@@ -119,7 +128,10 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 bio_set_dev(bdevice_bio, bdevice);
                 bdevice_bio->bi_iter.bi_sector = curr_offset;
                 bdevice_bio->bi_opf = REQ_OP_WRITE;
-                bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset);
+                if(bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset)) {
+                    printk("Error: bio_add_page failed.\n");
+                    return -1;
+                }
             }
 
             /* Perform the block operation */
