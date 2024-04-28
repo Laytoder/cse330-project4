@@ -84,7 +84,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
             /* Perform the block operation */
             submit_bio_wait(bdevice_bio);
 
-            if(copy_to_user(rw_request.data, kernel_buffer, rw_request.size);){
+            if(copy_to_user(rw_request.data, kernel_buffer, rw_request.size)){
                 printk("Error: Copying data to user.\n");
                 return -1;
             }
@@ -125,7 +125,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
             /* Perform the block operation */
             submit_bio_wait(bdevice_bio);
 
-            if(copy_to_user(rw_request.data, kernel_buffer, rw_request.size);){
+            if(copy_to_user(rw_request.data, kernel_buffer, rw_request.size)){
                 printk("Error: Copying data to user.\n");
                 return -1;
             }
