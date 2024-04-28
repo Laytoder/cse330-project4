@@ -63,14 +63,18 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
             /* Allocate a kernel buffer to read/write user data */
             num_buffers = rw_request.size / 512;
             if (cmd == BREAD) {
+                printk("reached here 5\n");
                 bdevice_bio = bio_alloc(bdevice, num_buffers, REQ_OP_READ, GFP_NOIO);
+                printk("reached here 6\n");
                 bio_set_dev(bdevice_bio, bdevice);
+                printk("reached here 7\n");
                 bdevice_bio->bi_iter.bi_sector = curr_offset;
                 bdevice_bio->bi_opf = REQ_OP_READ;
                 if(bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset)) {
                     printk("Error: bio_add_page failed.\n");
                     return -1;
                 }
+                printk("reached here 8\n");
             }
             else {
                 bdevice_bio = bio_alloc(bdevice, num_buffers, REQ_OP_WRITE, GFP_NOIO);
@@ -109,16 +113,20 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
 
             /* Allocate a kernel buffer to read/write user data */
             num_buffers = rwoffset_request.size / 512;
-            if (cmd == BREAD) {
+            if (cmd == BREADOFFSET) {
+                printk("reached here 1\n");
                 curr_offset = rwoffset_request.offset;
                 bdevice_bio = bio_alloc(bdevice, num_buffers, REQ_OP_READ, GFP_NOIO);
+                printk("reached here 2\n");
                 bio_set_dev(bdevice_bio, bdevice);
+                printk("reached here 3\n");
                 bdevice_bio->bi_iter.bi_sector = curr_offset;
                 bdevice_bio->bi_opf = REQ_OP_READ;
                 if(bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset)) {
                     printk("Error: bio_add_page failed.\n");
                     return -1;
                 }
+                printk("reached here 4\n");
             }
             else {
                 curr_offset = rwoffset_request.offset;
