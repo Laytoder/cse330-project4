@@ -80,6 +80,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 for(int i = 0; i < num_buffers; i++) {
                     bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset);
                     submit_bio_wait(bdevice_bio);
+                    bio_reset(bdevice_bio, bdevice, FMODE_READ);
                     curr_offset = curr_offset + 512;
                 }
                 printk("reached here 8\n");
@@ -92,6 +93,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 for(int i = 0; i < num_buffers; i++) {
                     bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset);
                     submit_bio_wait(bdevice_bio);
+                    bio_reset(bdevice_bio, bdevice, FMODE_WRITE);
                     curr_offset = curr_offset + 512;
                 }
             }
@@ -138,6 +140,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 for(int i = 0; i < num_buffers; i++) {
                     bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset);
                     submit_bio_wait(bdevice_bio);
+                    bio_reset(bdevice_bio, bdevice, FMODE_READ);
                     curr_offset = curr_offset + 512;
                 }
                 printk("reached here 4\n");
@@ -151,6 +154,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 for(int i = 0; i < num_buffers; i++) {
                     bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset);
                     submit_bio_wait(bdevice_bio);
+                    bio_reset(bdevice_bio, bdevice, FMODE_WRITE);
                     curr_offset = curr_offset + 512;
                 }
             }
