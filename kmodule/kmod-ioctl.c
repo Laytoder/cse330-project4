@@ -77,9 +77,10 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 printk("reached here 7\n");
                 bdevice_bio->bi_iter.bi_sector = curr_offset;
                 bdevice_bio->bi_opf = REQ_OP_READ;
-                if(bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset)) {
-                    printk("Error: bio_add_page failed.\n");
-                    return -1;
+                for(int i = 0; i < num_buffers; i++) {
+                    bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset);
+                    submit_bio_wait(bdevice_bio);
+                    curr_offset = curr_offset + 512;
                 }
                 printk("reached here 8\n");
             }
@@ -88,16 +89,14 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 bio_set_dev(bdevice_bio, bdevice);
                 bdevice_bio->bi_iter.bi_sector = curr_offset;
                 bdevice_bio->bi_opf = REQ_OP_WRITE;
-                if(bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset)) {
-                    printk("Error: bio_add_page failed.\n");
-                    return -1;
+                for(int i = 0; i < num_buffers; i++) {
+                    bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset);
+                    submit_bio_wait(bdevice_bio);
+                    curr_offset = curr_offset + 512;
                 }
             }
 
-            curr_offset = curr_offset + rw_request.size;
-
             /* Perform the block operation */
-            submit_bio_wait(bdevice_bio);
 
             if(copy_to_user(rw_request.data, kernel_buffer, rw_request.size)){
                 printk("Error: Copying data to user.\n");
@@ -115,6 +114,8 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
             }
 
             printk("reached here copy 5\n");
+
+            kernel_buffer = (char*)(vmalloc(rw_request.size));
 
             if(copy_from_user(kernel_buffer, rwoffset_request.data, rwoffset_request.size)){
                 printk("Error: User didn't send right message.\n");
@@ -134,9 +135,10 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 printk("reached here 3\n");
                 bdevice_bio->bi_iter.bi_sector = curr_offset;
                 bdevice_bio->bi_opf = REQ_OP_READ;
-                if(bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset)) {
-                    printk("Error: bio_add_page failed.\n");
-                    return -1;
+                for(int i = 0; i < num_buffers; i++) {
+                    bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset);
+                    submit_bio_wait(bdevice_bio);
+                    curr_offset = curr_offset + 512;
                 }
                 printk("reached here 4\n");
             }
@@ -146,14 +148,14 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 bio_set_dev(bdevice_bio, bdevice);
                 bdevice_bio->bi_iter.bi_sector = curr_offset;
                 bdevice_bio->bi_opf = REQ_OP_WRITE;
-                if(bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset)) {
-                    printk("Error: bio_add_page failed.\n");
-                    return -1;
+                for(int i = 0; i < num_buffers; i++) {
+                    bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset);
+                    submit_bio_wait(bdevice_bio);
+                    curr_offset = curr_offset + 512;
                 }
             }
 
             /* Perform the block operation */
-            submit_bio_wait(bdevice_bio);
 
             if(copy_to_user(rw_request.data, kernel_buffer, rw_request.size)){
                 printk("Error: Copying data to user.\n");
