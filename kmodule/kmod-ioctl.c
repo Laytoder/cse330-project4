@@ -23,9 +23,13 @@
 #include <linux/cdev.h>
 #include <linux/nospec.h>
 
-#include "kmod-main.h"
+#include "common.h"
 
 #include "../ioctl-defines.h"
+
+/* USB storage disk-related data structures */
+static struct block_device*     bdevice;
+static struct bio*              bdevice_bio;
 
 /* Device-related definitions */
 static dev_t            dev = 0;

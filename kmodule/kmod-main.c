@@ -18,7 +18,7 @@
 #include <linux/blkdev.h>
 #include <linux/version.h>
 
-#include "kmod-main.h"
+#include "common.h"
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Lakshya Gupta, Tathagat Panwar, Aadeesh Sharma");
@@ -29,7 +29,9 @@ MODULE_VERSION("1.0");
 char* device = "/dev/sdb";
 module_param(device, charp, S_IRUGO);
 
-bdevice = NULL;
+/* USB storage disk-related data structures */
+static struct block_device*     bdevice = NULL;
+static struct bio*              bdevice_bio;
 
 bool kmod_ioctl_init(void);
 void kmod_ioctl_teardown(void);
