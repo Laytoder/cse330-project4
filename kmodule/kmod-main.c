@@ -24,7 +24,7 @@ MODULE_DESCRIPTION("A Block Abstraction Read/Write for a USB device.");
 MODULE_VERSION("1.0");
 
 /* USB storage device name (to be received as module argument) */
-char* device = "";
+char* device = "/dev/sdb";
 module_param(device, charp, S_IRUGO);
 
 /* USB storage disk-related data structures */
