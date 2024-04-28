@@ -28,8 +28,8 @@ char* device = "/dev/sdb";
 module_param(device, charp, S_IRUGO);
 
 /* USB storage disk-related data structures */
-static struct block_device*     bdevice = NULL;
-static struct bio*              bdevice_bio;
+extern static struct block_device*     bdevice = NULL;
+extern static struct bio*              bdevice_bio;
 
 bool kmod_ioctl_init(void);
 void kmod_ioctl_teardown(void);
