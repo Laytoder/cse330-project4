@@ -38,7 +38,7 @@ static struct cdev      kmod_cdev;
 struct block_rw_ops         rw_request;
 struct block_rwoffset_ops   rwoffset_request;
 
-void * kernel_buffer;
+char * kernel_buffer;
 
 unsigned int curr_offset = 0;
 
@@ -56,6 +56,8 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 printk("Error: User didn't send right message.\n");
                 return -1;
             }
+
+            kernel_buffer = (char*)(vmalloc(rw_request.size));
 
             printk("reached here copy 2\n");
             if(copy_from_user(kernel_buffer, rw_request.data, rw_request.size)){
