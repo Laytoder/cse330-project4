@@ -50,16 +50,20 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
     {
         case BREAD:
         case BWRITE:
+            printk("reached here copy 1\n");
             /* Get request from user */
             if(copy_from_user((void*) &rw_request, (void*)arg, sizeof(struct block_rw_ops))){
                 printk("Error: User didn't send right message.\n");
                 return -1;
             }
 
+            printk("reached here copy 2\n");
             if(copy_from_user(kernel_buffer, rw_request.data, rw_request.size)){
                 printk("Error: User didn't send right message.\n");
                 return -1;
             }
+
+            printk("reached here copy 3\n");
 
             /* Allocate a kernel buffer to read/write user data */
             num_buffers = rw_request.size / 512;
@@ -102,15 +106,20 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
         case BREADOFFSET:
         case BWRITEOFFSET:
             /* Get request from user */
+            printk("reached here copy 4\n");
             if(copy_from_user((void*) &rwoffset_request, (void*)arg, sizeof(struct block_rwoffset_ops))){
                 printk("Error: User didn't send right message.\n");
                 return -1;
             }
 
+            printk("reached here copy 5\n");
+
             if(copy_from_user(kernel_buffer, rwoffset_request.data, rwoffset_request.size)){
                 printk("Error: User didn't send right message.\n");
                 return -1;
             }
+
+            printk("reached here copy 6\n");
 
             /* Allocate a kernel buffer to read/write user data */
             num_buffers = rwoffset_request.size / 512;
