@@ -23,6 +23,8 @@
 #include <linux/cdev.h>
 #include <linux/nospec.h>
 
+#include "kmod-main.h";
+
 #include "../ioctl-defines.h"
 
 /* Device-related definitions */
