@@ -28,8 +28,8 @@
 #include "../ioctl-defines.h"
 
 /* USB storage disk-related data structures */
-static struct block_device*     bdevice;
-static struct bio*              bdevice_bio;
+struct block_device*     bdevice;
+struct bio*              bdevice_bio;
 
 /* Device-related definitions */
 static dev_t            dev = 0;
