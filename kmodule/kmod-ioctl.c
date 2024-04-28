@@ -44,6 +44,8 @@ void * kernel_buffer;
 
 unsigned int curr_offset = 0;
 
+unsigned int num_buffers;
+
 static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
     switch (cmd)
     {
@@ -61,7 +63,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
             }
 
             /* Allocate a kernel buffer to read/write user data */
-            unsigned int num_buffers = rw_request.size / 512;
+            num_buffers = rw_request.size / 512;
             if (cmd == BREAD) {
                 bdevice_bio = bio_alloc(bdevice, num_buffers, REQ_OP_READ, GFP_NOIO);
                 bio_set_dev(bdevice_bio, bdevice);
@@ -70,7 +72,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset);
             }
             else {
-                bdevice_bio = bio_alloc(bdevice, num_buffers, REQ_OP_WIRTE, GFP_NOIO);
+                bdevice_bio = bio_alloc(bdevice, num_buffers, REQ_OP_WRITE, GFP_NOIO);
                 bio_set_dev(bdevice_bio, bdevice);
                 bdevice_bio->bi_iter.bi_sector = curr_offset;
                 bdevice_bio->bi_opf = REQ_OP_WRITE;
@@ -102,7 +104,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
             }
 
             /* Allocate a kernel buffer to read/write user data */
-            unsigned int num_buffers = rwoffset_request.size / 512;
+            num_buffers = rwoffset_request.size / 512;
             if (cmd == BREAD) {
                 curr_offset = rwoffset_request.offset;
                 bdevice_bio = bio_alloc(bdevice, num_buffers, REQ_OP_READ, GFP_NOIO);
@@ -113,7 +115,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
             }
             else {
                 curr_offset = rwoffset_request.offset;
-                bdevice_bio = bio_alloc(bdevice, num_buffers, REQ_OP_WIRTE, GFP_NOIO);
+                bdevice_bio = bio_alloc(bdevice, num_buffers, REQ_OP_WRITE, GFP_NOIO);
                 bio_set_dev(bdevice_bio, bdevice);
                 bdevice_bio->bi_iter.bi_sector = curr_offset;
                 bdevice_bio->bi_opf = REQ_OP_WRITE;
