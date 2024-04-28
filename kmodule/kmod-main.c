@@ -36,13 +36,13 @@ void kmod_ioctl_teardown(void);
 
 static bool open_usb_disk(void) {
     /* Open the USB storage disk)*/
-    bdevice = blkdev_get_by_path(device, FMODE_READ_WRITE, NULL, NULL);
+    bdevice = blkdev_get_by_path(device, FMODE_READ | FMODE_WRITE, NULL, NULL);
     return true;
 }
 
 static void close_usb_disk(void) {
     /* Close the USB storage disk (Hint: use blkdev_put(..);)*/
-    blkdev_put(device, FMODE_READ_WRITE);
+    blkdev_put(bdevice, FMODE_READ | FMODE_WRITE);
 }
 
 static int __init kmod_init(void) {
