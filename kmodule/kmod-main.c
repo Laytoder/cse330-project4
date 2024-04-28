@@ -18,7 +18,7 @@
 #include <linux/blkdev.h>
 #include <linux/version.h>
 
-#include "kmod-main.h";
+#include "kmod-main.h"
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Lakshya Gupta, Tathagat Panwar, Aadeesh Sharma");
