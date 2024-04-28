@@ -18,8 +18,6 @@
 #include <linux/blkdev.h>
 #include <linux/version.h>
 
-#include "common.h"
-
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Lakshya Gupta, Tathagat Panwar, Aadeesh Sharma");
 MODULE_DESCRIPTION("A Block Abstraction Read/Write for a USB device.");
@@ -30,8 +28,8 @@ char* device = "/dev/sdb";
 module_param(device, charp, S_IRUGO);
 
 /* USB storage disk-related data structures */
-struct block_device*     bdevice = NULL;
-struct bio*              bdevice_bio;
+static struct block_device*     bdevice = NULL;
+static struct bio*              bdevice_bio;
 
 bool kmod_ioctl_init(void);
 void kmod_ioctl_teardown(void);

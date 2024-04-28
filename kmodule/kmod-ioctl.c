@@ -23,13 +23,11 @@
 #include <linux/cdev.h>
 #include <linux/nospec.h>
 
-#include "common.h"
-
 #include "../ioctl-defines.h"
 
 /* USB storage disk-related data structures */
-struct block_device*     bdevice;
-struct bio*              bdevice_bio;
+extern static struct block_device*     bdevice;
+extern static struct bio*              bdevice_bio;
 
 /* Device-related definitions */
 static dev_t            dev = 0;
