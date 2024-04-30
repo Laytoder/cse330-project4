@@ -83,6 +83,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                     submit_bio_wait(bdevice_bio);
                     bio_reset(bdevice_bio, bdevice, FMODE_READ);
                     curr_offset = curr_offset + 1;
+                    bdevice_bio->bi_iter.bi_sector = curr_offset;
                 }
                 printk("reached here 8\n");
             }
@@ -96,6 +97,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                     submit_bio_wait(bdevice_bio);
                     bio_reset(bdevice_bio, bdevice, FMODE_WRITE);
                     curr_offset = curr_offset + 1;
+                    bdevice_bio->bi_iter.bi_sector = curr_offset;
                 }
             }
 
@@ -143,6 +145,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                     submit_bio_wait(bdevice_bio);
                     bio_reset(bdevice_bio, bdevice, FMODE_READ);
                     curr_offset = curr_offset + 1;
+                    bdevice_bio->bi_iter.bi_sector = curr_offset;
                 }
                 printk("reached here 4\n");
             }
@@ -157,6 +160,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                     submit_bio_wait(bdevice_bio);
                     bio_reset(bdevice_bio, bdevice, FMODE_WRITE);
                     curr_offset = curr_offset + 1;
+                    bdevice_bio->bi_iter.bi_sector = curr_offset;
                 }
             }
 
