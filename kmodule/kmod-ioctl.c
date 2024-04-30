@@ -45,6 +45,7 @@ unsigned int curr_offset = 0;
 unsigned int num_buffers;
 
 static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
+    curr_offset = 0;
     printk("reached here\n");
     switch (cmd)
     {
