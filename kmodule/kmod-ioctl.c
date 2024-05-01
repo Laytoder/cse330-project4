@@ -80,7 +80,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 bdevice_bio = bio_alloc(bdevice, num_buffers, REQ_OP_READ, GFP_NOIO);
                 printk("\nreached here 6\n");
                 printk("reached here 7\n");
-                bdevice_bio->bi_iter.bi_sector = 0;
+                // bdevice_bio->bi_iter.bi_sector = 0;
                 bdevice_bio->bi_opf = REQ_OP_READ;
 
                 for(int i = 0; i < num_buffers; i++) {
@@ -89,9 +89,9 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                         curr_offset = 0;
                     }
                     bio_set_dev(bdevice_bio, bdevice);
-                    bdevice_bio->bi_iter.bi_sector += curr_offset;
+                    bdevice_bio->bi_iter.bi_sector = curr_offset / 512;
 
-                    bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset);
+                    bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset % 4096);
                     submit_bio_wait(bdevice_bio);
                     bio_reset(bdevice_bio, bdevice, FMODE_READ);
                     curr_offset = curr_offset + 512;
