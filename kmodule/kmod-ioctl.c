@@ -95,8 +95,9 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
 
                 }
                 // printk("reached here 8\n");
+                copy_to_user(rw_request.data, kernel_buffer, rw_request.size);
             }
-            copy_to_user(rw_request.data, kernel_buffer, rw_request.size);
+            
             else {
                 bdevice_bio = bio_alloc(bdevice, num_buffers, REQ_OP_WRITE, GFP_NOIO);
                 bio_set_dev(bdevice_bio, bdevice);
@@ -142,7 +143,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
             /* Allocate a kernel buffer to read/write user data */
             num_buffers = rw_request.size / 512;
             page_number = 0;
-            if (cmd == BREAD) {
+            if (cmd == BREADOFFSET) {
 
 
                 bdevice_bio = bio_alloc(bdevice, num_buffers, REQ_OP_READ, GFP_NOIO);
@@ -162,9 +163,10 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                     // kernel_buffer += i * 512;
 
                 }
+                copy_to_user(rw_request.data, kernel_buffer, rw_request.size);
+
                 // printk("reached here 8\n");
             }
-            copy_to_user(rw_request.data, kernel_buffer, rw_request.size);
 
             else {
                 curr_offset = rwoffset_request.offset;
