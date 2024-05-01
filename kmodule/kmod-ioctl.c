@@ -86,7 +86,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 for(int i = 0; i < num_buffers; i++) {
                     if (curr_offset >= 4096) {
                         kernel_buffer += 4096;
-                        curr_offset = 0;
+                        // curr_offset = 0;
                     }
                     bio_set_dev(bdevice_bio, bdevice);
                     bdevice_bio->bi_iter.bi_sector = curr_offset / 512;
