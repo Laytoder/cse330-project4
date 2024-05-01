@@ -97,9 +97,10 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                     // vfree(kernel_buffer + i * 512);
 
                 }
-                // vfree(kernel_buffer + i * 512);
                 // printk("reached here 8\n");
                 copy_to_user(rw_request.data, kernel_buffer, rw_request.size);
+                vfree(kernel_buffer);
+
             }
             
             else {
