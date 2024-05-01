@@ -87,6 +87,8 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                     bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset);
                     submit_bio_wait(bdevice_bio);
                     bio_reset(bdevice_bio, bdevice, FMODE_READ);
+                    printk("bc\n");
+                    printk("%u\n", curr_offset);
                     if (curr_offset > 4096) {
                         printk("reached here aadeesh\n");
                         page_number += 1;
