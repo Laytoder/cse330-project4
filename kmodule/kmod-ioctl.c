@@ -94,7 +94,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                         curr_offset = 0;
                         kernel_buffer_copy = kernel_buffer;
                     }
-                    curr_offset = curr_offset + 1;
+                    curr_offset = curr_offset + 512;
                     bdevice_bio->bi_iter.bi_sector = curr_offset;
                 }
                 printk("reached here 8\n");
