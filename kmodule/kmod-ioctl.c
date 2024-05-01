@@ -76,7 +76,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
             page_number = 0;
             if (cmd == BREAD) {
                 printk("reached here 5\n");
-                // printk(num_buffers);
+                printk("%u", num_buffers);
                 bdevice_bio = bio_alloc(bdevice, num_buffers, REQ_OP_READ, GFP_NOIO);
                 printk("\nreached here 6\n");
                 bio_set_dev(bdevice_bio, bdevice);
