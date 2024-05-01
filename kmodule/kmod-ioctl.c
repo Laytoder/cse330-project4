@@ -82,24 +82,8 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 printk("reached here 7\n");
                 bdevice_bio->bi_iter.bi_sector = 0;
                 bdevice_bio->bi_opf = REQ_OP_READ;
-                // for(int i = 0; i < num_buffers; i++) {
-                //     bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset);
-                //     submit_bio_wait(bdevice_bio);
-                //     bio_reset(bdevice_bio, bdevice, FMODE_READ);
-                //     // printk("bc\n");
-                //     // printk("%u\n", curr_offset);
-                //     if (curr_offset > 4096) {
-                //         printk("reached here aadeesh\n");
-                //         page_number += 1;
-                //         kernel_buffer = kernel_buffer_copy + 4096 * page_number;
-                //         curr_offset = 0;
-                //         kernel_buffer_copy = kernel_buffer;
-                //     }
-                //     curr_offset = curr_offset + 512;
-                //     bdevice_bio->bi_iter.bi_sector = curr_offset;
-                // }
-                // printk("reached here 8\n");
-                for(int i = 0; i < num_buffers; i++) {
+
+                for(int i = 0; i < rw_request; i++) {
                     if (curr_offset >= 4096) {
                         kernel_buffer += 4096;
                         curr_offset = 0;
