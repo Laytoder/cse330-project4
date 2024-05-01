@@ -52,49 +52,6 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
     switch (cmd)
     {
         case BREAD:
-            printk("reached here copy 1\n");
-            /* Get request from user */
-            if(copy_from_user((void*) &rw_request, (void*)arg, sizeof(struct block_rw_ops))){
-                printk("Error: User didn't send right message.\n");
-                return -1;
-            }
-
-            kernel_buffer = (char*)(vmalloc(rw_request.size));
-            kernel_buffer_copy = kernel_buffer;
-
-            printk("reached here copy 2\n");
-            if(copy_from_user(kernel_buffer, rw_request.data, rw_request.size)){
-                printk("Error: User didn't send right message.\n");
-                return -1;
-            }
-
-            printk("reached here copy 3\n");
-
-            /* Allocate a kernel buffer to read/write user data */
-            num_buffers = rw_request.size / 512;
-            page_number = 0;
-            if (cmd == BREAD) {
-
-
-                bdevice_bio = bio_alloc(bdevice, num_buffers, REQ_OP_READ, GFP_NOIO);
-                // curr_offset = 0;
-                // bdevice_bio->bi_iter.bi_sector = 0;
-                bdevice_bio->bi_opf = REQ_OP_READ;
-
-                for(int i = 0; i < num_buffers; i++) {
- 
-                    bio_set_dev(bdevice_bio, bdevice);
-                    bdevice_bio->bi_iter.bi_sector = curr_offset / 512;
-
-                    bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer + i * 512), 512, curr_offset % 4096);
-                    submit_bio_wait(bdevice_bio);
-                    bio_reset(bdevice_bio, bdevice, FMODE_READ);
-                    curr_offset = curr_offset + 512;
-                    // kernel_buffer += i * 512;
-
-                }
-                // printk("reached here 8\n");
-            }
         case BWRITE:
             printk("reached here copy 1\n");
             /* Get request from user */
