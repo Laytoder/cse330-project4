@@ -89,7 +89,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                         curr_offset = 0;
                     }
                     bio_set_dev(bdevice_bio, bdevice);
-                    bdevice_bio->bi_iter.bi_sector = 0;
+                    bdevice_bio->bi_iter.bi_sector += 1;
 
                     bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset);
                     submit_bio_wait(bdevice_bio);
