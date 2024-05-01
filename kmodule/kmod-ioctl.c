@@ -131,7 +131,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 return -1;
             }
     /* Copy the data to user */
-            vfree(kernel_buffer);   
+            // vfree(kernel_buffer);   
             return 0;
         case BREADOFFSET:
         case BWRITEOFFSET:
