@@ -120,7 +120,8 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 printk("Error: Copying data to user.\n");
                 return -1;
             }
-
+    /* Copy the data to user */
+            vfree(kernel_buffer);   
             return 0;
         case BREADOFFSET:
         case BWRITEOFFSET:
@@ -191,7 +192,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 printk("Error: Copying data to user.\n");
                 return -1;
             }
-
+            vfree(kernel_buffer);   
             return 0;
         default: 
             printk("Error: incorrect operation requested, returning.\n");
