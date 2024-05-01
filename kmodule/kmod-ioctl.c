@@ -75,19 +75,15 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
             num_buffers = rw_request.size / 512;
             page_number = 0;
             if (cmd == BREAD) {
-                printk("reached here 5\n");
-                printk("%u\n", num_buffers);
+
+
                 bdevice_bio = bio_alloc(bdevice, num_buffers, REQ_OP_READ, GFP_NOIO);
-                printk("\nreached here 6\n");
-                printk("reached here 7\n");
+                curr_offset = 0;
                 // bdevice_bio->bi_iter.bi_sector = 0;
                 bdevice_bio->bi_opf = REQ_OP_READ;
 
                 for(int i = 0; i < num_buffers; i++) {
-                    // if (curr_offset >= 4096) {
-                    //     kernel_buffer += 4096;
-                    //     // curr_offset = 0;
-                    // }
+ 
                     kernel_buffer += i * 512;
                     bio_set_dev(bdevice_bio, bdevice);
                     bdevice_bio->bi_iter.bi_sector = curr_offset / 512;
@@ -97,7 +93,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                     bio_reset(bdevice_bio, bdevice, FMODE_READ);
                     curr_offset = curr_offset + 512;
                 }
-                printk("reached here 8\n");
+                // printk("reached here 8\n");
             }
             else {
                 bdevice_bio = bio_alloc(bdevice, num_buffers, REQ_OP_WRITE, GFP_NOIO);
