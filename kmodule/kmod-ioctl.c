@@ -122,41 +122,46 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
         case BWRITEOFFSET:
             /* Get request from user */
             printk("reached here copy 4\n");
-            if(copy_from_user((void*) &rwoffset_request, (void*)arg, sizeof(struct block_rwoffset_ops))){
+            if(copy_from_user((void*) &rw_request, (void*)arg, sizeof(struct block_rw_ops))){
                 printk("Error: User didn't send right message.\n");
                 return -1;
             }
-
-            printk("reached here copy 5\n");
 
             kernel_buffer = (char*)(vmalloc(rw_request.size));
+            kernel_buffer_copy = kernel_buffer;
 
-            if(copy_from_user(kernel_buffer, rwoffset_request.data, rwoffset_request.size)){
-                printk("Error: User didn't send right message.\n");
-                return -1;
-            }
+            // printk("reached here copy 2\n");
+            // if(copy_from_user(kernel_buffer, rw_request.data, rw_request.size)){
+            //     printk("Error: User didn't send right message.\n");
+            //     return -1;
+            // }
 
-            printk("reached here copy 6\n");
+            printk("reached here copy 3\n");
 
             /* Allocate a kernel buffer to read/write user data */
-            num_buffers = rwoffset_request.size / 512;
-            if (cmd == BREADOFFSET) {
-                printk("reached here 1\n");
-                curr_offset = rwoffset_request.offset;
+            num_buffers = rw_request.size / 512;
+            page_number = 0;
+            if (cmd == BREAD) {
+
+
                 bdevice_bio = bio_alloc(bdevice, num_buffers, REQ_OP_READ, GFP_NOIO);
-                printk("reached here 2\n");
-                bio_set_dev(bdevice_bio, bdevice);
-                printk("reached here 3\n");
-                bdevice_bio->bi_iter.bi_sector = curr_offset;
+                // curr_offset = 0;
+                // bdevice_bio->bi_iter.bi_sector = 0;
                 bdevice_bio->bi_opf = REQ_OP_READ;
+
                 for(int i = 0; i < num_buffers; i++) {
-                    bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 4096, curr_offset);
+ 
+                    bio_set_dev(bdevice_bio, bdevice);
+                    bdevice_bio->bi_iter.bi_sector = curr_offset / 512;
+
+                    bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer + i * 512), 512, curr_offset % 4096);
                     submit_bio_wait(bdevice_bio);
                     bio_reset(bdevice_bio, bdevice, FMODE_READ);
-                    curr_offset = curr_offset + 1;
-                    bdevice_bio->bi_iter.bi_sector = curr_offset;
+                    curr_offset = curr_offset + 512;
+                    // kernel_buffer += i * 512;
+
                 }
-                printk("reached here 4\n");
+                // printk("reached here 8\n");
             }
             else {
                 curr_offset = rwoffset_request.offset;
