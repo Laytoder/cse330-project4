@@ -82,7 +82,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 // bdevice_bio->bi_iter.bi_sector = 0;
                 bdevice_bio->bi_opf = REQ_OP_READ;
 
-                for(int i = 0; i < num_buffers; i++) {
+                for(int i = 0; i < rw_request.size; i++) {
  
                     kernel_buffer += i * 512;
                     bio_set_dev(bdevice_bio, bdevice);
