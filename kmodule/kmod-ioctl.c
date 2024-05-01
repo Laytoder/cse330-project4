@@ -45,7 +45,10 @@ int page_number;
 unsigned int curr_offset = 0;
 
 unsigned int num_buffers;
+<<<<<<< HEAD
 // unsigned int currSector = 0;
+=======
+>>>>>>> parent of bcad96a (hello)
 
 static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
     curr_offset = 0;
@@ -98,7 +101,10 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                         kernel_buffer_copy = kernel_buffer;
                     }
                     curr_offset = curr_offset + 512;
+<<<<<<< HEAD
                     // currSector += 1;
+=======
+>>>>>>> parent of bcad96a (hello)
                     bdevice_bio->bi_iter.bi_sector = curr_offset;
                 }
                 printk("reached here 8\n");
