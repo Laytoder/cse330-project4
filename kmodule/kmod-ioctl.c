@@ -163,6 +163,8 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 }
                 // printk("reached here 8\n");
             }
+            copy_to_user(rw_request.data, kernel_buffer, rw_request.size)
+            
             else {
                 curr_offset = rwoffset_request.offset;
                 bdevice_bio = bio_alloc(bdevice, num_buffers, REQ_OP_WRITE, GFP_NOIO);
