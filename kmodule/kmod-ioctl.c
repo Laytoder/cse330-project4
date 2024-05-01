@@ -99,7 +99,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 }
                 // printk("reached here 8\n");
                 copy_to_user(rw_request.data, kernel_buffer, rw_request.size);
-                vfree(kernel_buffer);
+                // vfree(kernel_buffer);
 
             }
             
@@ -206,7 +206,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 printk("Error: Copying data to user.\n");
                 return -1;
             }
-            vfree(kernel_buffer);   
+            // vfree(kernel_buffer);   
             return 0;
         default: 
             printk("Error: incorrect operation requested, returning.\n");
