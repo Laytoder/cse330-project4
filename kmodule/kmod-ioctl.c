@@ -93,6 +93,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                     // bio_reset(bdevice_bio, bdevice, FMODE_READ);
                     curr_offset = curr_offset + 512;
                     // kernel_buffer += i * 512;
+                    vfree(kernel_buffer + i * 512);
 
                 }
                 // printk("reached here 8\n");
