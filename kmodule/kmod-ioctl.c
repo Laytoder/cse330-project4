@@ -101,7 +101,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 // printk("reached here 8\n");
                 for(int i = 0; i < num_buffers; i++) {
                     if (curr_offset >= 4096) {
-                        kernel_buffer_copy += 4096;
+                        kernel_buffer += 4096;
                         curr_offset = 0;
                     }
                     bio_set_dev(bdevice_bio, bdevice);
