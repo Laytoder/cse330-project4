@@ -63,11 +63,11 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
             kernel_buffer = (char*)(vmalloc(rw_request.size));
             kernel_buffer_copy = kernel_buffer;
 
-            printk("reached here copy 2\n");
-            if(copy_from_user(kernel_buffer, rw_request.data, rw_request.size)){
-                printk("Error: User didn't send right message.\n");
-                return -1;
-            }
+            // printk("reached here copy 2\n");
+            // if(copy_from_user(kernel_buffer, rw_request.data, rw_request.size)){
+            //     printk("Error: User didn't send right message.\n");
+            //     return -1;
+            // }
 
             printk("reached here copy 3\n");
 
