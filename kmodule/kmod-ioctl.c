@@ -96,21 +96,31 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                     vfree(kernel_buffer + i * 512);
 
                 }
+                vfree(kernel_buffer + i * 512);
                 // printk("reached here 8\n");
                 copy_to_user(rw_request.data, kernel_buffer, rw_request.size);
             }
             
             else {
-                bdevice_bio = bio_alloc(bdevice, num_buffers, REQ_OP_WRITE, GFP_NOIO);
-                bio_set_dev(bdevice_bio, bdevice);
-                bdevice_bio->bi_iter.bi_sector = curr_offset;
+                printk("reached here copy 2\n");
+                if(copy_from_user(kernel_buffer, rw_request.data, rw_request.size)){
+                    printk("Error: User didn't send right message.\n");
+                    return -1;
+                }
+                curr_offset = 0;
+                // bdevice_bio = bio_alloc(bdevice, num_buffers, REQ_OP_WRITE, GFP_NOIO);
+                // bio_set_dev(bdevice_bio, bdevice);
+                // bdevice_bio->bi_iter.bi_sector = curr_offset;
                 bdevice_bio->bi_opf = REQ_OP_WRITE;
                 for(int i = 0; i < num_buffers; i++) {
-                    bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer), 512, curr_offset);
+                    bdevice_bio = bio_alloc(bdevice, 1, REQ_OP_WRITE, GFP_NOIO);
+                    bdevice_bio->bi_iter.bi_sector = curr_offset / 512;
+                    bio_add_page(bdevice_bio, vmalloc_to_page(kernel_buffer + i * 512), 512, curr_offset);
                     submit_bio_wait(bdevice_bio);
-                    bio_reset(bdevice_bio, bdevice, FMODE_WRITE);
-                    curr_offset = curr_offset + 1;
-                    bdevice_bio->bi_iter.bi_sector = curr_offset;
+                    // bio_reset(bdevice_bio, bdevice, FMODE_WRITE);
+                    curr_offset = curr_offset + 512;
+                    vfree(kernel_buffer + i * 512);
+                    // bdevice_bio->bi_iter.bi_sector = curr_offset;
                 }
             }
 
@@ -153,7 +163,7 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
                 // curr_offset = 0;
                 // bdevice_bio->bi_iter.bi_sector = 0;
                 bdevice_bio->bi_opf = REQ_OP_READ;
-
+                curr_offset = rwoffset_request.offset;
                 for(int i = 0; i < num_buffers; i++) {
  
                     bio_set_dev(bdevice_bio, bdevice);
