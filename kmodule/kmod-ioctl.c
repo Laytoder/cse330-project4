@@ -77,12 +77,12 @@ static long kmod_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
             if (cmd == BREAD) {
 
 
-                bdevice_bio = bio_alloc(bdevice, num_buffers, REQ_OP_READ, GFP_NOIO);
+                bdevice_bio = bio_alloc(bdevice, 1, REQ_OP_READ, GFP_NOIO);
                 curr_offset = 0;
                 // bdevice_bio->bi_iter.bi_sector = 0;
                 bdevice_bio->bi_opf = REQ_OP_READ;
 
-                for(int i = 0; i < rw_request.size; i++) {
+                for(int i = 0; i < num_buffers; i++) {
  
                     kernel_buffer += i * 512;
                     bio_set_dev(bdevice_bio, bdevice);
